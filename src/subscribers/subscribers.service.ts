@@ -81,7 +81,7 @@ export class SubscribersService {
 
   async update( updateSubscriberDto: UpdateSubscriberDto, user: IUser) {
     const updated = await this.SubscriberModel.updateOne({
-      email: user.email, 
+      email: user.email},{
       ...updateSubscriberDto,
       updatedBy: {
         _id: user._id,

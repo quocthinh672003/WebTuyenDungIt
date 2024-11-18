@@ -16,6 +16,9 @@ export class ResumesService {
     private resumeModel: SoftDeleteModel<ResumeDocument>
   ) { }
   async create(createUserCvDto: CreateUserCvDto, user: IUser) {
+    if (!user || !user.email || !user._id) {
+      throw new BadRequestException('Invalid user data');
+    }
     const { url, companyId, jobId } = createUserCvDto;
     const { email, _id } = user;
 
@@ -81,21 +84,22 @@ export class ResumesService {
     return await this.resumeModel.findById(id);
   }
   async findByUsers(user: IUser) {
-    return await this.resumeModel.find({
-      userId: user._id,
-    })
-      .sort("-createdAt")
-      .populate([
-        {
-          path: "companyId",
-          select: { name: 1 }
-        },
-        {
-          path: "jobId",
-          select: { name: 1 }
-        }
-      ])
+    // console.log('User:', user);
+    try {
+      if (!user || !user._id) {
+        throw new Error('Invalid user object');
+      }
+      return await this.resumeModel.find({ userId: user._id })
+        .sort("-createdAt")
+        .populate([
+          { path: "companyId", select: { name: 1 } },
+          { path: "jobId", select: { name: 1 } }
+        ]);
+    } catch (error) {
+      throw new Error(`Error finding resumes: ${error.message}`);
+    }
   }
+  
 
   async update(_id: string, status: string, user: IUser) {
     if (!mongoose.Types.ObjectId.isValid(_id)) {

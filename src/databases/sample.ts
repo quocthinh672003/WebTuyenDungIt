@@ -345,7 +345,7 @@ export const INIT_PERMISSIONS = [
     },
     {
         "_id": "648ad56ddafdb9754f40b87c",
-        "name": "Fetch resumes by user",
+        "name": "get CV by user",
         "apiPath": "/api/v1/resumes/by-user",
         "method": "POST",
         "module": "RESUMES",

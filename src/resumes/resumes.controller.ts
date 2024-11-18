@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { ResumesService } from './resumes.service';
 import { CreateUserCvDto } from './dto/create-resume.dto';
 import { UpdateResumeDto } from './dto/update-resume.dto';
-import { ResponseMessage, User } from 'src/decorators/customize';
+import { Public, ResponseMessage, SkipChecPkermission, User } from 'src/decorators/customize';
 import { IUser } from 'src/users/users.interface';
 
 @Controller('resumes')
@@ -10,14 +10,20 @@ export class ResumesController {
   constructor(private readonly resumesService: ResumesService) { }
 
   @Post()
+  @SkipChecPkermission()
   @ResponseMessage("Create a new resume")
   create(@Body() createUserCvDto: CreateUserCvDto, @User() user: IUser) {
     return this.resumesService.create(createUserCvDto, user);
   }
 
   @Post('by-user')
+  @SkipChecPkermission()
   @ResponseMessage("Get Resumes by User")
   getResumesByUser(@User() user: IUser) {
+    // console.log('User:', user);
+    if (!user || !user._id) {
+      throw new Error('Invalid user object or missing user ID');
+    } 
     return this.resumesService.findByUsers(user);
   }
 

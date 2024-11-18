@@ -8,6 +8,7 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { TransformInterceptor } from './core/transform.interceptor';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
@@ -34,6 +35,8 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: ['1','2']
   });
+
+  
 
   app.enableCors(
     {

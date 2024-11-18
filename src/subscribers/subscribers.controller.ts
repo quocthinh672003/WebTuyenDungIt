@@ -16,9 +16,9 @@ export class SubscribersController {
     return this.subscribersService.create(createSubscriberDto, user);
   }
 
+  @SkipChecPkermission()
   @Post("skills")
   @ResponseMessage("Get subscribers skills")
-  @SkipChecPkermission()
   getUserSkills(
     @User() user: IUser
   ) {
@@ -41,11 +41,11 @@ export class SubscribersController {
   }
 
   @Patch()
+  @ResponseMessage("update subscribers ")
+
   @SkipChecPkermission()
-  update(@Body() updateSubscriberDto: UpdateSubscriberDto,
-    @User() user: IUser
-  ) {
-    return this.subscribersService.update( updateSubscriberDto, user);
+  update(@Body() updateSubscriberDto: UpdateSubscriberDto, @User() user: IUser) {
+    return this.subscribersService.update(updateSubscriberDto, user);
   }
 
   @Delete(':id')
